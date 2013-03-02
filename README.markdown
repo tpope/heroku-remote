@@ -53,11 +53,11 @@ available in `FETCH_HEAD`.
 Show a Git log for the currently deployed commit.  Does a `heroku fetch` if
 necessary.
 
-    heroku log --pretty=oneline
+    $ heroku log --pretty=oneline
 
 You can also give releases and they will be translated into commit SHAs.
 
-    heroku log v123..v124
+    $ heroku log v123..v124
 
 Not to be confused with `heroku logs`.
 
@@ -66,17 +66,17 @@ Not to be confused with `heroku logs`.
 Check out the currently deployed release commit.  Does a `heroku fetch` if
 necessary.  Accepts an optional release to check out instead.
 
-    heroku checkout -b still-working v122
+    $ heroku checkout -b still-working v122
 
 ### heroku remote:add
 
 Adds the application as a Git remote named after itself.  This is useful if
 you need to break out of the box offered by the above commands.
 
-    heroku remote:add --app myapp-staging
+    $ heroku remote:add --app myapp-staging
 
 Normally you would use this with [binstubs][]:
 
-    staging remote:add
+    $ staging remote:add
 
 [binstubs]: https://github.com/sstephenson/rbenv/wiki/Understanding-binstubs
