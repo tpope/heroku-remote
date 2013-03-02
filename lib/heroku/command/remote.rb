@@ -45,7 +45,7 @@ class Heroku::Command::Remote < Heroku::Command::Base
   # -f, --force   # force push
   # -n, --dry-run # don't actually send the updates
   def push
-    refspec = shift_argument || 'HEAD'
+    refspec = (args.shift || 'HEAD').dup
     refspec << ':master' unless refspec.include?(':') || refspec =~ /^-/
     args.unshift('--force') if options[:force]
     args.unshift('--dry-run') if options[:dry_run]
