@@ -10,8 +10,10 @@ this problem is twofold:
 
 1.  Create [binstubs][] for each Heroku app.  For example, in `bin/staging`:
 
-        #!/bin/sh
-        HEROKU_APP=myapp-staging exec heroku "$@"
+    ```sh
+    #!/bin/sh
+    HEROKU_APP=myapp-staging exec heroku "$@"
+    ```
 
     Now you can do `staging logs`, `staging info`, and any other Heroku
     command without any `--app` or `--remote` insanity.
