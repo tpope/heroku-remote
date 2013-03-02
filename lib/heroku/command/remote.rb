@@ -159,7 +159,6 @@ class Heroku::Command::Remote < Heroku::Command::Base
     if release.to_s.empty? || release =~ /^v\d+$/
       fetch_commit(get_release(release)['commit'])
     else
-      raise release
       release
     end
   end
