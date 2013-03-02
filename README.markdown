@@ -5,8 +5,8 @@ the `heroku` Git remote.  This is great for simple apps, but starts to break
 down when you need multiple Heroku apps to serve up different environments
 (staging, production, and so on).  You end up having to set up a bunch of
 remotes by hand, and then your reward is the eternal obligation to explicitly
-pass in the remote: `heroku console -r staging` and the like.  My solution to
-this problem is twofold:
+pass in the remote: `heroku run console -r staging` and the like.  My solution
+to this problem is twofold:
 
 1.  Create [binstubs][] for each Heroku app.  For example, in `bin/staging`:
 
