@@ -80,3 +80,7 @@ Normally you would use this with [binstubs][]:
     $ staging remote:add
 
 [binstubs]: https://github.com/sstephenson/rbenv/wiki/Understanding-binstubs
+
+## License
+
+Copyright © Tim Pope.  MIT License.  See LICENSE for details.
