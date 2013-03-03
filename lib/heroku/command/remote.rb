@@ -49,7 +49,9 @@ class Heroku::Command::Remote < Heroku::Command::Base
     refspec << ':master' unless refspec.include?(':') || refspec =~ /^-/
     args.unshift('--force') if options[:force]
     args.unshift('--dry-run') if options[:dry_run]
-    system('git', 'push', remote_name || git_url, refspec, *args)
+    arguments = ['git', 'push', remote_name || git_url, refspec] + args
+    puts arguments.join(" ")
+    system(*arguments)
   end
   alias_command "push", "remote:push"
   # If someone has a more elaborate "deploy" command, let it take precedence.
@@ -65,7 +67,9 @@ class Heroku::Command::Remote < Heroku::Command::Base
   # fetch the underlying repository URL, leaving the results only in
   # FETCH_HEAD.
   def fetch
-    system('git', 'fetch', remote_name || git_url, *args)
+    arguments = ['git', 'fetch', remote_name || git_url] + args
+    puts arguments.join(" ")
+    system(*arguments)
   end
   alias_command 'fetch', 'remote:fetch'
 
