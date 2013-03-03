@@ -68,14 +68,18 @@ necessary.  Accepts an optional release to check out instead.
 
     $ heroku checkout -b still-working v122
 
+### heroku sha
+
+Show the commit SHA for the currently deployed or given release.  Useful if
+you need to break out of the box offered by the built-ins.
+
+    $ git cherry -v $(heroku sha)
+    $ git log $(staging sha)...$(production sha)
+
 ### heroku remote:add
 
-Adds the application as a Git remote named after itself.  This is useful if
-you need to break out of the box offered by the above commands.
-
-    $ heroku remote:add --app myapp-staging
-
-Normally you would use this with [binstubs][]:
+Adds the application as a Git remote named after itself.  Useful if you've
+been using [binstubs][] with no remote.
 
     $ staging remote:add
 

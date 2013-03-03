@@ -26,6 +26,24 @@ class Heroku::Command::Remote < Heroku::Command::Base
     end
   end
 
+  # sha [RELEASE]
+  #
+  # show the commit SHA for the given or latest release
+  #
+  # If the commit is locally available, shows the full 40 digits.  Otherwise
+  # just shows the 7 we get back from the API.
+  def sha
+    commit = fetch_release_commit(shift_argument, true)
+    sha = git("rev-parse --quiet --verify #{commit}")
+    if sha.empty?
+      display(commit)
+      exit 1
+    else
+      display(sha)
+    end
+  end
+  alias_command 'sha', 'remote:sha'
+
   # remote:add [NAME]
   #
   # add a remote for the app
