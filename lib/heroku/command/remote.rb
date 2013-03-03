@@ -33,7 +33,7 @@ class Heroku::Command::Remote < Heroku::Command::Base
   # If the commit is locally available, shows the full 40 digits.  Otherwise
   # just shows the 7 we get back from the API.
   def sha
-    commit = fetch_release_commit(shift_argument, true)
+    commit = fetch_release_commit(shift_argument)
     sha = git("rev-parse --quiet --verify #{commit}")
     if sha.empty?
       display(commit)
