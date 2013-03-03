@@ -117,7 +117,7 @@ class Heroku::Command::Remote < Heroku::Command::Base
         "#{fetch_release_commit($1)}#$2#{fetch_release_commit($3)}"
       when /^(v\d+)$/
         found = true
-        "#{fetch_release_commit($2)}"
+        fetch_release_commit(arg)
       else
         arg
       end
