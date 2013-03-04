@@ -151,7 +151,7 @@ class Heroku::Command::Remote < Heroku::Command::Base
   private
 
   def remote_name
-    @remote_name ||= git_remotes.invert.fetch(app, git_url)
+    @remote_name ||= (git_remotes || {}).invert[app]
   end
 
   def git_url
