@@ -8,15 +8,7 @@ remotes by hand, and then your reward is the eternal obligation to explicitly
 pass in the remote: `heroku run console -r staging` and the like.  My solution
 to this problem is twofold:
 
-1.  Create [binstubs][] for each Heroku app.  For example, in `bin/staging`:
-
-    ```sh
-    #!/bin/sh
-    HEROKU_APP=myapp-staging exec heroku "$@"
-    ```
-
-    Now you can do `staging logs`, `staging info`, and any other Heroku
-    command without any `--app` or `--remote` insanity.
+1.  [Create a binstub for each Heroku app][binstubs].
 
 2.  Use this plugin, which encapsulates common operations on the Git remote.
 
@@ -83,7 +75,7 @@ been using [binstubs][] with no remote.
 
     $ staging remote:add
 
-[binstubs]: https://github.com/sstephenson/rbenv/wiki/Understanding-binstubs
+[binstubs]: https://github.com/tpope/heroku-binstubs
 
 ## License
 
