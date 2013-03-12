@@ -186,7 +186,7 @@ class Heroku::Command::Remote < Heroku::Command::Base
   end
 
   def system(*)
-    super or exit $?.exitstatus
+    super or exit($?.exitstatus.to_i)
   end
 
 end
