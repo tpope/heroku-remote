@@ -53,6 +53,57 @@ class Heroku::Command::Remote < Heroku::Command::Base
     create_git_remote(shift_argument || app, git_url)
   end
 
+  # remote:setup [BASENAME]
+  #
+  # add remotes for a family of apps
+  #
+  # Add remotes for BASENAME and BASENAME-*.  BASENAME defaults to the
+  # repository directory name.
+  #
+  # -f, --full          # use full app name
+  # -r, --remote REMOTE # name for BASENAME (not BASENAME-*) remote
+  #
+  #Examples:
+  #
+  # ~/foo $ heroku remote:setup
+  # Git remote heroku added
+  # Git remote staging added
+  #
+  # ~/foo $ heroku remote:setup -f
+  # Git remote foo added
+  # Git remote foo-staging added
+  #
+  # ~/foo $ heroku remote:setup -r production
+  # Git remote production added
+  # Git remote staging added
+  def setup
+    original = shift_argument || File.basename(Dir.pwd).tr('_', '-').split('.').first
+    all_apps = api.get_apps.body
+    apps = []
+    basename = [original, original.gsub(/-/, '')].detect do |b|
+      apps = all_apps.select {|a| a['name'] =~ /^#{b}(-|$)/}
+      apps.any?
+    end
+    if apps.empty?
+      error("Couldn't find any apps named #{original} or #{original}-*.")
+    end
+    apps.each do |app|
+      remote =
+        if options[:remote] && app['name'] == basename
+          options[:remote]
+        elsif options[:full]
+          app['name']
+        else
+          app['name'][basename.length+1..-1] || 'heroku'
+        end
+      if git('remote').split("\n").include?(remote)
+        display "Git remote #{remote} already exists"
+      else
+        create_git_remote(remote, app['git_url'])
+      end
+    end
+  end
+
   # push [REFSPEC ...]
   #
   # git push the given REFSPEC to the app remote

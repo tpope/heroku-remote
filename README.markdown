@@ -75,6 +75,15 @@ been using [binstubs][] with no remote.
 
     $ staging remote:add
 
+### heroku remote:setup
+
+Create a `heroku` remote for an app named after the current directory, and one
+remote for each app named like `directory-*`, named after the `*` portion.
+Override the name of the `heroku` remote with `-r`.  Here's my recommended
+setup, which pairs perfectly with [heroku binstubs][binstubs]:
+
+    $ heroku remote:setup -r production
+
 [binstubs]: https://github.com/tpope/heroku-binstubs
 
 ## License
