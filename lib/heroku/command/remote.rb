@@ -78,10 +78,9 @@ class Heroku::Command::Remote < Heroku::Command::Base
   # Git remote staging added
   def setup
     original = shift_argument || File.basename(Dir.pwd).tr('_', '-').split('.').first
-    all_apps = api.get_apps.body
     apps = []
     basename = [original, original.gsub(/-/, '')].detect do |b|
-      apps = all_apps.select {|a| a['name'] =~ /^#{b}(-|$)/}
+      apps = get_apps.select {|a| a['name'] =~ /^#{b}(-|$)/}
       apps.any?
     end
     if apps.empty?
@@ -201,12 +200,41 @@ class Heroku::Command::Remote < Heroku::Command::Base
 
   private
 
+  def platform_api
+    @platform_api ||=
+      begin
+        require 'platform-api'
+        PlatformAPI.connect(Heroku::Auth.password)
+      rescue LoadError
+      end
+  end
+
+  def get_apps
+    if platform_api
+      platform_api.app.list
+    else
+      api.get_apps.body
+    end
+  end
+
+  def get_app(app_name = app)
+    if platform_api
+      begin
+        platform_api.app.info(app_name)
+      rescue Excon::Error::NotFound
+        error "App not found"
+      end
+    else
+      api.get_app(app_name).body
+    end
+  end
+
   def remote_name
     @remote_name ||= (git_remotes(Dir.pwd) || {}).invert[app]
   end
 
   def git_url
-    @git_url ||= api.get_app(app).body['git_url']
+    @git_url ||= get_app['git_url']
   end
 
   def fetch_commit(sha)
@@ -219,18 +247,28 @@ class Heroku::Command::Remote < Heroku::Command::Base
     sha
   end
 
-  def get_release(release = nil)
-    if release.to_s.empty?
-      api.get_releases(app).body.last
+  def get_release_commit(release_name = nil)
+    if platform_api
+      release =
+        if release_name.to_s.empty?
+          platform_api.release.list(app).last
+        else
+          platform_api.release.info(app, release_name)
+        end
+      platform_api.slug.info(app, release['slug']['id'])
     else
-      api.get_release(app, release).body
-    end
+      if release_name.to_s.empty?
+        api.get_releases(app).body.last
+      else
+        api.get_release(app, release_name).body
+      end
+    end['commit']
   end
 
 
   def fetch_release_commit(release = nil)
     if release.to_s.empty? || release =~ /^v\d+$/
-      fetch_commit(get_release(release)['commit'])
+      fetch_commit(get_release_commit(release))
     else
       release
     end
