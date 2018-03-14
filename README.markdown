@@ -1,5 +1,8 @@
 # Heroku Git remote commands
 
+**This plugin requires legacy support for Ruby plugins and will not work with
+a standard Heroku CLI install.**
+
 By default, the `heroku` command operates on the application referred to by
 the `heroku` Git remote.  This is great for simple apps, but starts to break
 down when you need multiple Heroku apps to serve up different environments
@@ -11,10 +14,6 @@ to this problem is twofold:
 1.  [Create a binstub for each Heroku app][binstubs].
 
 2.  Use this plugin, which encapsulates common operations on the Git remote.
-
-## Installation
-
-    $ heroku plugins:install https://github.com/tpope/heroku-remote.git
 
 ## Commands
 
